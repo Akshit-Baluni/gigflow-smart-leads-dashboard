@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  full_name  String
+  email      String   @unique
+  password   String
+  role       String   @default("recruiter")
+  leads      Lead[]
+  created_at DateTime @default(now())
+}
+
+model Lead {
+  id               Int        @id @default(autoincrement())
+  full_name        String
+  email            String     @unique
+  phone            String?
+  company_name     String?
+  job_role         String?
+  source           String?
+  status           String     @default("New")
+  assigned_user    User       @relation(fields: [assigned_user_id], references: [id])
+  assigned_user_id Int
+  activities       Activity[]
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
+}
+
+model Activity {
+  id            Int      @id @default(autoincrement())
+  lead          Lead     @relation(fields: [lead_id], references: [id], onDelete: Cascade)
+  lead_id       Int
+  note          String   @db.Text
+  activity_type String
+  created_at    DateTime @default(now())
+}
