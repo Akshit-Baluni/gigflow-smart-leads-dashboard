@@ -131,4 +131,18 @@ const changePassword = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, getUserProfile, updateProfile, changePassword };
+const deactivateAccount = async (req, res) => {
+  try {
+    // Delete all leads belonging to the user first (FK constraint)
+    await prisma.lead.deleteMany({ where: { assigned_user_id: req.user.id } });
+
+    // Delete the user record
+    await prisma.user.delete({ where: { id: req.user.id } });
+
+    res.json({ message: 'Account deactivated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { registerUser, loginUser, getUserProfile, updateProfile, changePassword, deactivateAccount };

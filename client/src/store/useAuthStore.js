@@ -62,6 +62,20 @@ const useAuthStore = create((set) => ({
     }
   },
 
+  deactivateAccount: async () => {
+    set({ loading: true, error: null });
+    try {
+      await api.delete('/auth/deactivate');
+      localStorage.removeItem('user');
+      set({ user: null, loading: false });
+      return { success: true };
+    } catch (error) {
+      const message = error.response?.data?.message || 'Deactivation failed';
+      set({ error: message, loading: false });
+      return { success: false, message };
+    }
+  },
+
   logout: () => {
     localStorage.removeItem('user');
     set({ user: null });

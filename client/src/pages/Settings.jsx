@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   User, 
   Mail, 
@@ -10,7 +11,8 @@ import {
   Monitor,
   Save,
   Loader2,
-  Database
+  Database,
+  AlertTriangle
 } from 'lucide-react';
 import useAuthStore from '../store/useAuthStore';
 import useThemeStore from '../store/useThemeStore';
@@ -18,9 +20,12 @@ import toast from 'react-hot-toast';
 import { clsx } from 'clsx';
 
 const Settings = () => {
-  const { user, updateProfile, changePassword, loading: authLoading } = useAuthStore();
+  const { user, updateProfile, changePassword, deactivateAccount, loading: authLoading } = useAuthStore();
   const { isDarkMode, toggleTheme } = useThemeStore();
+  const navigate = useNavigate();
   const [isSaving, setIsSaving] = useState(false);
+  const [showDeactivateModal, setShowDeactivateModal] = useState(false);
+  const [isDeactivating, setIsDeactivating] = useState(false);
 
   const [profileData, setProfileData] = useState({
     full_name: user?.full_name || '',
@@ -67,8 +72,22 @@ const Settings = () => {
     setIsSaving(false);
   };
 
+  const handleDeactivate = async () => {
+    setIsDeactivating(true);
+    const result = await deactivateAccount();
+    if (result.success) {
+      toast.success('Account deactivated. Goodbye!', { icon: '🗑️' });
+      navigate('/login');
+    } else {
+      toast.error(result.message);
+      setIsDeactivating(false);
+      setShowDeactivateModal(false);
+    }
+  };
+
   return (
-    <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700 pb-20">
+    <>
+      <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700 pb-20">
       <div className="flex justify-between items-end">
         <div>
           <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">System Config</h1>
@@ -251,13 +270,51 @@ const Settings = () => {
                 <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight uppercase">Nuclear Option</h3>
              </div>
              <p className="text-xs font-bold text-slate-500 mb-6 italic">This will wipe all candidate records and your profile terminal from our servers.</p>
-             <button className="px-6 py-3 bg-rose-500/10 border border-rose-500/20 text-rose-500 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all">
+             <button
+               onClick={() => setShowDeactivateModal(true)}
+               className="px-6 py-3 bg-rose-500/10 border border-rose-500/20 text-rose-500 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all"
+             >
                 Deactivate Account
              </button>
           </section>
         </div>
       </div>
     </div>
+
+      {/* Deactivate Confirmation Modal */}
+      {showDeactivateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-900 border border-rose-500/30 rounded-3xl p-10 max-w-md w-full mx-4 shadow-2xl shadow-rose-500/10 animate-in zoom-in-95 duration-200">
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="p-4 bg-rose-500/10 rounded-2xl">
+                <AlertTriangle className="h-8 w-8 text-rose-500" />
+              </div>
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Confirm Deactivation</h2>
+              <p className="text-sm text-slate-500 font-bold leading-relaxed">
+                This action is <span className="text-rose-500">permanent and irreversible</span>. All your leads, pipeline data, and your account will be permanently deleted from our servers.
+              </p>
+            </div>
+            <div className="flex gap-4 mt-8">
+              <button
+                onClick={() => setShowDeactivateModal(false)}
+                disabled={isDeactivating}
+                className="flex-1 px-6 py-3 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-white/10 transition-all disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeactivate}
+                disabled={isDeactivating}
+                className="flex-1 px-6 py-3 bg-rose-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isDeactivating ? <Loader2 className="h-3 w-3 animate-spin" /> : null}
+                {isDeactivating ? 'Deleting...' : 'Yes, Delete Everything'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
