@@ -32,7 +32,7 @@ const Login = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-[24px] neuro-gradient text-white mb-6 shadow-2xl shadow-sky-500/30 transform hover:rotate-12 transition-transform duration-500">
             <Zap className="h-10 w-10 fill-white" />
           </div>
-          <h2 className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">GigFlow</h2>
+          <h2 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter">GigFlow</h2>
           <p className="mt-4 text-slate-500 dark:text-slate-400 font-medium">The intelligent command center for modern hiring teams.</p>
         </div>
 

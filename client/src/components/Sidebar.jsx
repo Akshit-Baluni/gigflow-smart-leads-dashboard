@@ -9,15 +9,18 @@ import {
   Zap,
   Moon,
   Sun,
-  ChevronRight
+  ChevronRight,
+  X
 } from 'lucide-react';
 import useAuthStore from '../store/useAuthStore';
 import useThemeStore from '../store/useThemeStore';
+import useUIStore from '../store/useUIStore';
 import toast from 'react-hot-toast';
 
 const Sidebar = () => {
   const { logout, user } = useAuthStore();
   const { isDarkMode, toggleTheme } = useThemeStore();
+  const { isSidebarOpen, closeSidebar } = useUIStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -34,21 +37,25 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-80 h-screen sticky top-0 flex flex-col bg-white dark:bg-[#05070a] border-r border-slate-200 dark:border-white/5 transition-all duration-700">
-      <div className="p-10">
-        <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => navigate('/')}>
+    <aside className={`w-80 h-[100dvh] fixed lg:sticky top-0 z-40 flex flex-col bg-white dark:bg-[#05070a] border-r border-slate-200 dark:border-white/5 transition-transform duration-500 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+      <div className="p-8 lg:p-10 flex items-center justify-between shrink-0">
+        <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => { navigate('/'); closeSidebar(); }}>
           <div className="h-12 w-12 rounded-[18px] neuro-gradient flex items-center justify-center text-white shadow-2xl shadow-sky-500/20 group-hover:rotate-12 transition-transform">
             <Zap className="h-6 w-6 fill-white" />
           </div>
           <span className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">GigFlow</span>
         </div>
+        <button className="lg:hidden text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors" onClick={closeSidebar}>
+          <X className="h-6 w-6" />
+        </button>
       </div>
 
-      <nav className="flex-1 px-6 space-y-2">
+      <nav className="flex-1 px-4 lg:px-6 space-y-2 overflow-y-auto min-h-0 py-2 scrollbar-hide">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
+            onClick={closeSidebar}
             className={({ isActive }) => `
               flex items-center justify-between px-6 py-4 rounded-[22px] transition-all duration-500 group
               ${isActive 
@@ -66,7 +73,7 @@ const Sidebar = () => {
         ))}
       </nav>
 
-      <div className="p-8 space-y-6">
+      <div className="p-6 lg:p-8 space-y-4 shrink-0">
         <div className="p-6 rounded-[28px] bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
           <div className="flex items-center justify-between mb-4">
             <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Interface Mode</p>

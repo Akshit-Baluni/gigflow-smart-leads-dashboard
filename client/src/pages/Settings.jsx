@@ -90,7 +90,7 @@ const Settings = () => {
       <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700 pb-20">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">System Config</h1>
+          <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">System Config</h1>
           <p className="text-slate-500 font-bold mt-2 italic">Manage your recruiter profile and system preferences.</p>
         </div>
       </div>

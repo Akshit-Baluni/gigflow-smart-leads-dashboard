@@ -126,7 +126,7 @@ const Dashboard = () => {
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">Command Center</h1>
+          <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter">Command Center</h1>
           <p className="text-slate-500 font-bold mt-2 flex items-center">
             <TrendingUp className="h-4 w-4 mr-2 text-emerald-500" />
             Your pipeline velocity is up 12% this week.
@@ -134,7 +134,7 @@ const Dashboard = () => {
         </div>
         <button 
           onClick={() => navigate('/leads/add')}
-          className="inline-flex items-center px-8 py-4 neuro-gradient text-white rounded-[24px] font-black text-sm shadow-2xl shadow-sky-500/20 hover:scale-105 active:scale-95 transition-all"
+          className="inline-flex items-center justify-center px-8 py-4 neuro-gradient text-white rounded-[24px] font-black text-sm shadow-2xl shadow-sky-500/20 hover:scale-105 active:scale-95 transition-all w-full md:w-auto"
         >
           <Plus className="h-5 w-5 mr-2" />
           Add New Lead

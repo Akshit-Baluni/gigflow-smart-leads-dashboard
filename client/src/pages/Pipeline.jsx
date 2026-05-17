@@ -193,14 +193,14 @@ const Pipeline = () => {
 
   return (
     <div className="h-full space-y-10 animate-in fade-in slide-in-from-right-8 duration-700">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">Visual Pipeline</h1>
+          <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter">Visual Pipeline</h1>
           <p className="text-slate-500 font-bold mt-2 italic">Drag and drop candidates across hiring stages.</p>
         </div>
         <button 
           onClick={() => navigate('/leads/add')}
-          className="px-6 py-3 neuro-gradient text-white rounded-2xl font-black text-sm shadow-xl hover:scale-105 transition-all"
+          className="px-6 py-3 neuro-gradient text-white rounded-2xl font-black text-sm shadow-xl hover:scale-105 transition-all w-full md:w-auto"
         >
           + Quick Onboard
         </button>
